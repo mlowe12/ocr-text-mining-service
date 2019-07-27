@@ -1,0 +1,46 @@
+swagger: "2.0"
+info:
+  title: "OCR Service API"
+  version: "1.0"
+basePath: /api/v1/ocr
+paths:
+  /submit:
+    post:
+      summary: submit document to OCR service
+      operationId: handlers.post_requests.ocr_to_data_handler
+      responses:
+        '200':
+          description: processing in progress
+          schema:
+            type: object
+            items:
+              $ref: '#/definitions/Item'
+      responses:
+        '503':
+          description: document not successfully posted
+          schema:
+            type: object
+            items:
+              $ref: '#/definitions/Error'
+      parameters:
+        - name: document
+          in: formData
+          type: file
+          required: true
+        - name: output_type
+          in: formData
+          type: string
+          required: true 
+definitions:  
+  Item:
+    type: object
+    properties:
+      serial_id: {type: string}
+      data: {type: object}
+      filename: {type: string}
+  Error:
+    type: object
+    properties:
+      serial_id: {type: string}
+      error_message: {type: string}
+      filename: {type: string}
